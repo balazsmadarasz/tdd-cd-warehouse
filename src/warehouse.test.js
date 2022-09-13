@@ -17,9 +17,10 @@ describe("warehouse", () => {
     });
 
     it("get result when type 'a', and return every search result", () => {
-      expect(warehouse.search("a")).toEqual([
-        { title: "a", artist: "a", copy: 1, purchases: [], reviews: [] },
-      ]);
+      const result = warehouse.search("a")[0];
+      expect(result.title).toEqual("a");
+      expect(result.artist).toEqual("a");
+      expect(result.copy).toEqual(1);
     });
   });
 
@@ -62,18 +63,33 @@ describe("warehouse", () => {
       );
       expect(result).toEqual(false);
     });
+    it("notify is called with the right parameters", () => {
+      let artist = "";
+      let title = "";
+      let copy = 0;
+      const notify = (titleParam, artistParam, copyParam) => {
+        title = titleParam;
+        artist = artistParam;
+        copy = copyParam;
+      };
+      const cd = new Cd("a", "a", 1, notify);
+      cd.buy("a@a.com", 1);
+      expect(artist).toEqual("a");
+      expect(title).toEqual("a");
+      expect(copy).toEqual(1);
+    })
   });
 
   describe("review", () => {
       it('can not send if user does not have any purshes for the cd', () => {
-        const cd = new Cd("a", "a", 1);
+        const cd = new Cd("a", "a", 1, () => {});
         const result = cd.review(
             { rate: 2, message: "message 1", email: "a@a.com" },
           );
         expect(result).toEqual(false);
       });
       it("able to make a review if he has any purcheses", () => {
-        const cd = new Cd("a", "a", 1);
+        const cd = new Cd("a", "a", 1, () => {});
         cd.buy("a@a.com", 1);
         const result = cd.review(
           { rate: 2, message: "message 1", email: "a@a.com" },

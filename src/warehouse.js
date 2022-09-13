@@ -16,7 +16,7 @@ class Warehouse {
       if (cd) {
         cd.copy += record.copy;
       } else {
-        this.stock.push(new Cd(record.title, record.artist, record.copy));
+        this.stock.push(new Cd(record.title, record.artist, record.copy, () => {}));
       }
     });
   }

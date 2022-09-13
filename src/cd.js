@@ -4,16 +4,19 @@ class Cd {
     copy;
     purchases = [];
     reviews = [];
+    notify;
 
-    constructor(title, artist, copy) {
+    constructor(title, artist, copy, notify) {
         this.title = title;
         this.artist = artist;
         this.copy = copy;
+        this.notify = notify;
     }
 
     buy(email, copy) {
         this.copy -= copy;
         this.purchases.push(email);
+        this.notify(this.title, this.artist, copy);
     }
 
     review(review) {
