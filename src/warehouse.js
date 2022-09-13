@@ -1,3 +1,5 @@
+const Cd = require("./cd");
+
 class Warehouse {
   stock = [];
   search(text) {
@@ -14,7 +16,7 @@ class Warehouse {
       if (cd) {
         cd.copy += record.copy;
       } else {
-        this.stock.push({ ...record, purchases: [], reviews: [] });
+        this.stock.push(new Cd(record.title, record.artist, record.copy));
       }
     });
   }
@@ -39,23 +41,8 @@ class Warehouse {
       const cd = this.stock.find(
         (item) => item.artist === record.artist && item.title === record.title
       );
-      cd.copy -= record.copy;
-      cd.purchases.push(email);
+      cd.buy(email, record.copy);
     });
-    return true;
-  }
-
-  review(record, review) {
-    const cd = this.stock.find(
-      (item) =>
-        item.artist === record.artist &&
-        item.title === record.title &&
-        item.purchases.some(email => email === review.email)
-    );
-    if (!cd) {
-      return false;
-    }
-    cd.reviews.push(review);
     return true;
   }
 }
