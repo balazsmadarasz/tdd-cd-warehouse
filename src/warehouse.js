@@ -5,7 +5,7 @@ class Warehouse {
   search(text) {
     return this.stock.filter(
       (x) => x.title.startsWith(text) || x.artist.startsWith(text)
-    );
+    ).map(cd => ({ ...cd, price: cd.getPrice() }));
   }
 
   record(records) {
@@ -16,7 +16,9 @@ class Warehouse {
       if (cd) {
         cd.copy += record.copy;
       } else {
-        this.stock.push(new Cd(record.title, record.artist, record.copy, () => {}));
+        this.stock.push(
+          new Cd(record.title, record.artist, record.copy, record.price, { notify: () => {}, isInTop100: () => false })
+        );
       }
     });
   }

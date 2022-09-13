@@ -72,7 +72,7 @@ describe("warehouse", () => {
         artist = artistParam;
         copy = copyParam;
       };
-      const cd = new Cd("a", "a", 1, notify);
+      const cd = new Cd("a", "a", 1, 10, { notify, isInTop100: () => false });
       cd.buy("a@a.com", 1);
       expect(artist).toEqual("a");
       expect(title).toEqual("a");
@@ -82,14 +82,14 @@ describe("warehouse", () => {
 
   describe("review", () => {
       it('can not send if user does not have any purshes for the cd', () => {
-        const cd = new Cd("a", "a", 1, () => {});
+        const cd = new Cd("a", "a", 1, 10, { notify: () => {}, isInTop100: () => false });
         const result = cd.review(
             { rate: 2, message: "message 1", email: "a@a.com" },
           );
         expect(result).toEqual(false);
       });
       it("able to make a review if he has any purcheses", () => {
-        const cd = new Cd("a", "a", 1, () => {});
+        const cd = new Cd("a", "a", 1, 10, { notify: () => {}, isInTop100: () => false });
         cd.buy("a@a.com", 1);
         const result = cd.review(
           { rate: 2, message: "message 1", email: "a@a.com" },
