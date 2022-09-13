@@ -44,6 +44,20 @@ class Warehouse {
     });
     return true;
   }
+
+  review(record, review) {
+    const cd = this.stock.find(
+      (item) =>
+        item.artist === record.artist &&
+        item.title === record.title &&
+        item.purchases.some(email => email === review.email)
+    );
+    if (!cd) {
+      return false;
+    }
+    cd.reviews.push(review);
+    return true;
+  }
 }
 
 module.exports = Warehouse;

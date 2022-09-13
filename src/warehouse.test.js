@@ -64,12 +64,25 @@ describe("warehouse", () => {
   });
 
   describe("review", () => {
-    //   it('can not send if user does not have any purshes for the cd', () => {
-    //     const result = warehouse.review(
-    //         { title: "a", artist: "a", rate: 2, message: "message 1" },
-    //         "a@a.com"
-    //       );
-    //     expect(result).toEqual(false);
-    //   })
+      it('can not send if user does not have any purshes for the cd', () => {
+        const result = warehouse.review(
+            { title: "a", artist: "a" },
+            { rate: 2, message: "message 1", email: "a@a.com" },
+          );
+        expect(result).toEqual(false);
+      });
+      it("able to make a review if he has any purcheses", () => {
+        warehouse.buy(
+          [{ title: "a", artist: "a", copy: 1 }],
+          "a@a.com"
+        );
+        const result = warehouse.review(
+          { title: "a", artist: "a" },
+          { rate: 2, message: "message 1", email: "a@a.com" },
+        );
+        const cd = warehouse.search("a")[0];
+        expect(result).toEqual(true);
+        expect(cd.reviews[0]).toEqual({ rate: 2, message: "message 1", email: "a@a.com" });
+      });
   });
 });
